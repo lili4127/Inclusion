@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stickman_heads_sphere
       objectReference: {fileID: 0}
+    - target: {fileID: 8592876449707639036, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0bcdca085445acc4aa21304ffa02deba, type: 2}
     - target: {fileID: 8592876449711865404, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
       propertyPath: m_Controller
       value: 
@@ -189,6 +193,29 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8592876449704432112, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
   m_PrefabInstance: {fileID: 541798136}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &541798138 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8592876449704463760, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
+  m_PrefabInstance: {fileID: 541798136}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &541798139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541798138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7347a804809e446baaef0a9b1b89271, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materials:
+  - {fileID: 2100000, guid: 6db85fc1002af7e44bf4ab4b4b085a16, type: 2}
+  - {fileID: 2100000, guid: 26dde8d170bfa354bbcbd9335444d55f, type: 2}
+  - {fileID: 2100000, guid: dfeaeb4277f8231449f41fc71bf91003, type: 2}
+  - {fileID: 2100000, guid: 0bcdca085445acc4aa21304ffa02deba, type: 2}
+  - {fileID: 2100000, guid: 5dc9d5ef5fcbced488b19557557a90fc, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
