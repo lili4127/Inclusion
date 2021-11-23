@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerColor : MonoBehaviour
 {
     [SerializeField] private GameObject particleEffect;
-    [SerializeField] private Transform particlePos;
     [SerializeField] private Material[] materials;
+    private Transform particlePos;
     private Renderer rend;
     private Material yellow;
     private Material red;
@@ -16,7 +16,8 @@ public class PlayerColor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rend = GetComponent<Renderer>();
+        rend = GetComponentInChildren<Renderer>();
+        particlePos = transform.GetChild(1).transform;
         yellow = materials[0];
         red = materials[1];
         green = materials[2];
