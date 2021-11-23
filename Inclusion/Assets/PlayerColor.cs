@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class PlayerColor : MonoBehaviour
 {
-    //[SerializeField] private GameObject particleEffect;
+    [SerializeField] private GameObject particleEffect;
+    [SerializeField] private Transform particlePos;
     [SerializeField] private Material[] materials;
     private Renderer rend;
     private Material yellow;
     private Material red;
     private Material green;
-    private Material gray;
-    private Material black;
     public int activeMaterial { get; private set; }
 
     // Start is called before the first frame update
@@ -21,37 +20,25 @@ public class PlayerColor : MonoBehaviour
         yellow = materials[0];
         red = materials[1];
         green = materials[2];
-        gray = materials[3];
-        black = materials[4];
         activeMaterial = 0;
         rend.material = yellow;
     }
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.W))
+        if (Input.GetKeyUp(KeyCode.A))
         {
             ChangeMaterial(0);
         }
 
-        else if (Input.GetKeyUp(KeyCode.A))
+        else if (Input.GetKeyUp(KeyCode.S))
         {
             ChangeMaterial(1);
         }
 
-        else if (Input.GetKeyUp(KeyCode.S))
-        {
-            ChangeMaterial(2);
-        }
-
         else if (Input.GetKeyUp(KeyCode.D))
         {
-            ChangeMaterial(3);
-        }
-
-        else if (Input.GetKeyUp(KeyCode.E))
-        {
-            ChangeMaterial(4);
+            ChangeMaterial(2);
         }
 
     }
@@ -63,8 +50,8 @@ public class PlayerColor : MonoBehaviour
             return;
         }
 
-        //Instantiate(particleEffect, transform.position, Quaternion.identity);
-        Debug.Log("made it");
+        GameObject spawnedVFX = Instantiate(particleEffect, particlePos.position, Quaternion.identity);
+        Destroy(spawnedVFX, 1);
 
         switch (i)
         {
@@ -79,14 +66,6 @@ public class PlayerColor : MonoBehaviour
             case 2:
                 rend.material = green;
                 activeMaterial = 2;
-                break;
-            case 3:
-                rend.material = gray;
-                activeMaterial = 3;
-                break;
-            case 4:
-                rend.material = black;
-                activeMaterial = 4;
                 break;
         }
     }
