@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1d10578868d674ebdbcc334281d00a13
+guid: 346c043dbd65c426c8cbe84657906cad
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Bangers
+  - Mouse Memoirs
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

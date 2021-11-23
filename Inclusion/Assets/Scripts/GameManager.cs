@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     {
         timerGoing = false;
         scoreText.text = "0";
-        livesText.text = "3";
+        livesText.text = "Lives: 3";
     }
 
     // Start is called before the first frame update
