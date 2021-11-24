@@ -2,27 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerColor : MonoBehaviour
+public class PlayerColor : Character
 {
-    [SerializeField] private GameObject particleEffect;
-    [SerializeField] private Material[] materials;
-    private Transform particlePos;
-    private Renderer rend;
-    private Material yellow;
-    private Material red;
-    private Material green;
-    public int activeMaterial { get; private set; }
+    [SerializeField] private Renderer child1Rend;
+    [SerializeField] private Renderer child2Rend;
+    [SerializeField] private List<int> childColors;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        rend = GetComponentInChildren<Renderer>();
-        particlePos = transform.GetChild(1).transform;
-        yellow = materials[0];
-        red = materials[1];
-        green = materials[2];
-        activeMaterial = 0;
-        rend.material = yellow;
+        childColors = new List<int> { 9, 9 };
+    }
+
+    private void OnEnable()
+    {
+        Enemy.playerAdded += AddToLine;
+        //Enemy.playerRemoved += RemoveFromLine;
     }
 
     private void Update()
@@ -41,17 +35,16 @@ public class PlayerColor : MonoBehaviour
         {
             ChangeMaterial(2);
         }
-
     }
 
-    public void ChangeMaterial(int i)
+    private void ChangeMaterial(int i)
     {
         if(i == activeMaterial)
         {
             return;
         }
 
-        GameObject spawnedVFX = Instantiate(particleEffect, particlePos.position, Quaternion.identity);
+        GameObject spawnedVFX = Instantiate(particleEffects[3], transform.position + particleOffset, Quaternion.identity);
         Destroy(spawnedVFX, 1);
 
         switch (i)
@@ -70,4 +63,51 @@ public class PlayerColor : MonoBehaviour
                 break;
         }
     }
+
+    public int GetActiveMaterial()
+    {
+        return activeMaterial;
+    }
+
+    private void AddToLine(int playerMaterial)
+    {
+        if (childColors.Contains(playerMaterial))
+        {
+            return;
+        }
+
+        for (int i = 1; i < 3; i++)
+        {
+            if (!transform.GetChild(i).gameObject.activeInHierarchy)
+            {
+                switch (i)
+                {
+                    case 1:
+                        child1Rend.material = materials[playerMaterial];
+                        break;
+                    case 2:
+                        child2Rend.material = materials[playerMaterial];
+                        break;
+                }
+                transform.GetChild(i).gameObject.SetActive(true);
+                childColors[i-1] = playerMaterial;
+                return;
+            }
+        }
+    }
+
+    //private void RemoveFromLine()
+    //{
+    //    List<int> childColors = new List<int>();
+
+    //    for (int i = 1; i < 3; i++)
+    //    {
+    //        if (transform.GetChild(i).gameObject.activeInHierarchy)
+    //        {
+    //            childColors.Add(transform.GetChild(0))
+    //            transform.GetChild(i).gameObject.SetActive(false);
+    //            return;
+    //        }
+    //    }
+    //}
 }

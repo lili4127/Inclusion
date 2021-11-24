@@ -22,10 +22,10 @@ public class GameManager : MonoBehaviour
         levelModifier = FindObjectOfType<LevelModifier>();
     }
 
-    private void OnEnable()
-    {
-        Enemy.playerHit += UpdateStrikes;
-    }
+    //private void OnEnable()
+    //{
+    //    Enemy.playerHit += UpdateStrikes;
+    //}
 
     // Start is called before the first frame update
     void Start()
@@ -149,8 +149,8 @@ public class GameManager : MonoBehaviour
         StartCoroutine(CountdownToStart());
     }
 
-    private void OnDisable()
-    {
-        Enemy.playerHit -= UpdateStrikes;
-    }
+    //private void OnDisable()
+    //{
+    //    Enemy.playerHit -= UpdateStrikes;
+    //}
 }
