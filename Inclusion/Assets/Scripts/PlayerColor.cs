@@ -1,21 +1,30 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerColor : Character
 {
-    [SerializeField] private Renderer[] childRenderers;
-    [SerializeField] private List<int> childColors;
+    [SerializeField] private List<GameObject> children;
+    [SerializeField] private List<Renderer> childrenRenderers;
+    private int activeChildren = 0;
+    private List<int> activeChildColors;
+    public static event System.Action gameLost;
 
     private void Awake()
     {
-        childColors = new List<int> { 9, 9, 9 };
+        activeChildColors = new List<int>();
+        children = new List<GameObject>();
+
+        for (int i = 0; i < transform.childCount - 1; i++)
+        {
+            children.Add(transform.GetChild(i+1).gameObject);
+            childrenRenderers.Add(children[i].GetComponentInChildren<Renderer>());
+        }
     }
 
     private void OnEnable()
     {
         Enemy.playerAdded += AddToLine;
-        //Enemy.playerRemoved += RemoveFromLine;
+        Enemy.playerRemoved += RemoveFromLine;
     }
 
     private void Update()
@@ -56,48 +65,70 @@ public class PlayerColor : Character
 
     private void AddToLine(int playerMaterial)
     {
-        Debug.Log(transform.childCount.ToString());
-        if (childColors.Contains(playerMaterial))
+        if (activeChildColors.Contains(playerMaterial))
         {
             return;
         }
 
-        for (int i = 1; i < transform.childCount; i++)
+        childrenRenderers[activeChildren].material = materials[playerMaterial];
+        children[activeChildren].SetActive(true);
+        activeChildren++;
+        activeChildColors.Add(playerMaterial);
+    }
+
+    private void RemoveFromLine(int playerMaterial)
+    {
+        if (!activeChildColors.Contains(playerMaterial))
         {
-            if (!transform.GetChild(i).gameObject.activeInHierarchy)
+            PlayEffect(playerMaterial, transform.position);
+            this.gameObject.SetActive(false);
+            ClearLine();
+            gameLost?.Invoke();
+            return;
+        }
+
+        int indexToRemove = activeChildColors.IndexOf(playerMaterial);
+        PlayEffect(playerMaterial, children[indexToRemove].transform.position);
+        activeChildren--;
+        activeChildColors.RemoveAt(indexToRemove);
+        TightenUpLine();
+    }
+
+    private void TightenUpLine()
+    {
+        for (int i = 0; i < children.Count; i++)
+        {
+            if (i < activeChildColors.Count)
             {
-                childRenderers[i-1].material = materials[playerMaterial];
-                transform.GetChild(i).gameObject.SetActive(true);
-                childColors[i-1] = playerMaterial;
-                return;
+                childrenRenderers[i].material = materials[activeChildColors[i]];
+                children[i].SetActive(true);
+            }
+
+            else
+            {
+                children[i].SetActive(false);
             }
         }
     }
 
-    //private void RemoveFromLine()
-    //{
-    //    for (int i = 1; i < 3; i++)
-    //    {
-    //        if (transform.GetChild(i).gameObject.activeInHierarchy)
-    //        {
-    //            for(int j = i; j < 3; j++)
-    //            {
-    //                switch (j)
-    //                {
-    //                    case 1:
-    //                        child1Rend.material = materials[playerMaterial];
-    //                        break;
-    //                    case 2:
-    //                        child2Rend.material = materials[playerMaterial];
-    //                        break;
-    //                    case 3:
-    //                        child3Rend.material = materials[playerMaterial];
-    //                        break;
-    //                }
-    //                transform.GetChild(j).gameObject.SetActive(false);
-    //            }
-    //            return;
-    //        }
-    //    }
-    //}
+    private void PlayEffect(int materialNumber, Vector3 pos)
+    {
+        GameObject spawnedVFX = Instantiate(particleEffects[materialNumber], pos + particleOffset, Quaternion.identity);
+        Destroy(spawnedVFX, 1);
+    }
+
+    private void ClearLine()
+    {
+        if (activeChildren > 0)
+        {
+            for (int i = 0; i < activeChildren; i++)
+            {
+                PlayEffect(activeChildColors[i], children[i].transform.position);
+                children[i].SetActive(false);
+            }
+        }
+
+        activeChildColors.Clear();
+        activeChildren = 0;
+    }
 }

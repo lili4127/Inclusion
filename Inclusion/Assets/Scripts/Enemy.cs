@@ -6,7 +6,7 @@ public class Enemy : Character
 {
     private ObjectPool enemyPool;
     public static event System.Action<int> playerAdded;
-    public static event System.Action playerRemoved;
+    public static event System.Action<int> playerRemoved;
 
     private void Awake()
     {
@@ -19,8 +19,7 @@ public class Enemy : Character
         {
             if (this.activeMaterial == p.GetActiveMaterial())
             {
-                PlayEffect(this.activeMaterial);
-                playerRemoved?.Invoke();
+                playerRemoved?.Invoke(this.activeMaterial);
                 ResetEnemy();
             }
 
@@ -30,12 +29,6 @@ public class Enemy : Character
                 ResetEnemy();
             }
         }
-    }
-
-    private void PlayEffect(int materialNumber)
-    {
-        GameObject spawnedVFX = Instantiate(particleEffects[materialNumber], transform.position + particleOffset, Quaternion.identity);
-        Destroy(spawnedVFX, 1);
     }
 
     public void ResetEnemy()

@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshProUGUI livesText;
     [SerializeField] private int playerLives = 99;
     public bool timerGoing { get; private set; }
     private float score = 0f;
@@ -18,14 +17,13 @@ public class GameManager : MonoBehaviour
     {
         timerGoing = false;
         scoreText.text = "0";
-        livesText.text = "Lives: " + playerLives.ToString();
         levelModifier = FindObjectOfType<LevelModifier>();
     }
 
-    //private void OnEnable()
-    //{
-    //    Enemy.playerHit += UpdateStrikes;
-    //}
+    private void OnEnable()
+    {
+        PlayerColor.gameLost += LoseGame;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -58,8 +56,6 @@ public class GameManager : MonoBehaviour
     {
         score = 0f;
         scoreText.text = score.ToString();
-        playerLives = 99;
-        livesText.text = "Lives: " + playerLives.ToString();
         levelModifier.PlaceEnemies();
         StartTimer();
     }
@@ -90,20 +86,8 @@ public class GameManager : MonoBehaviour
         score += 50;
     }
 
-    private void UpdateStrikes()
-    {
-        playerLives--;
-        livesText.text = "Lives: " + playerLives.ToString();
-
-        if (playerLives <= 0)
-        {
-            LoseGame();
-        }
-    }
-
     private void LoseGame()
     {
-        Time.timeScale = 0f;
         StopTimer();
 
         //if (PlayerPrefs.GetInt("highscore", 0) < Mathf.FloorToInt(score))
@@ -143,14 +127,12 @@ public class GameManager : MonoBehaviour
         //panels[1].SetActive(false);
         score = 0f;
         scoreText.text = score.ToString();
-        playerLives = 3;
-        livesText.text = "Lives: " + playerLives.ToString();
         Time.timeScale = 1f;
         StartCoroutine(CountdownToStart());
     }
 
-    //private void OnDisable()
-    //{
-    //    Enemy.playerHit -= UpdateStrikes;
-    //}
+    private void OnDisable()
+    {
+        PlayerColor.gameLost -= LoseGame;
+    }
 }
