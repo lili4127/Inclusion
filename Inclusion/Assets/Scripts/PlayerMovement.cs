@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private GameManager gameManager;
     private Rigidbody rb;
-    private float movementSpeed = 700f;
+    private float movementSpeed = 400f;
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void ChangeSpeed()
     {
-        if (movementSpeed < 700)
+        if (movementSpeed < 900)
         {
             movementSpeed += 50;
         }

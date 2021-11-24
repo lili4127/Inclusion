@@ -72,6 +72,6 @@ public class Enemy : MonoBehaviour
     public void ResetEnemy()
     {
         this.gameObject.SetActive(false);
-        enemyPool.ReturnToPool(this);
+        enemyPool.ReturnToPool(this.gameObject);
     }
 }

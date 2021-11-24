@@ -5,12 +5,14 @@ using UnityEngine;
 public class LevelModifier : MonoBehaviour
 {
     [SerializeField] private int level;
-    private ObjectPool enemyPool;
+    [SerializeField] private ObjectPool enemyPool;
+    [SerializeField] private ObjectPool standPool;
 
     private void Awake()
     {
         level = 10;
-        enemyPool = FindObjectOfType<ObjectPool>();
+        enemyPool = enemyPool.GetComponent<ObjectPool>();
+        standPool = standPool.GetComponent<ObjectPool>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -38,9 +40,18 @@ public class LevelModifier : MonoBehaviour
     {
         for (int i = 1; i < level; i++)
         {
-            Enemy e = enemyPool.Get();
+            GameObject e = enemyPool.Get();
             e.transform.position = new Vector3(0, 0, 100/level * i);
             e.gameObject.SetActive(true);
+
+            int r = Random.Range(0, 11);
+            if (r <= 3)
+            {
+                GameObject s = standPool.Get();
+                s.transform.position = new Vector3(0, 1, 100 / level * i);
+                e.transform.position += new Vector3(0, 1, 0);
+                s.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -51,6 +62,14 @@ public class LevelModifier : MonoBehaviour
             if (t.gameObject.activeInHierarchy)
             {
                 t.GetComponent<Enemy>().ResetEnemy();
+            }
+        }
+
+        foreach (Transform t in standPool.transform)
+        {
+            if (t.gameObject.activeInHierarchy)
+            {
+                t.GetComponent<Stand>().ResetStand();
             }
         }
     }

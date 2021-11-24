@@ -4,37 +4,37 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    [SerializeField] private Enemy enemyPrefab;
-    private Queue<Enemy> enemyQueue;
+    [SerializeField] private GameObject prefab;
+    private Queue<GameObject> queue;
 
     private void Start()
     {
-        enemyQueue = new Queue<Enemy>();
-        AddEnemy(10);
+        queue = new Queue<GameObject>();
+        Add(10);
     }
 
-    public Enemy Get()
+    public GameObject Get()
     {
-        if (enemyQueue.Count == 0)
+        if (queue.Count == 0)
         {
-            AddEnemy(1);
+            Add(1);
         }
 
-        return enemyQueue.Dequeue();
+        return queue.Dequeue();
     }
 
-    private void AddEnemy(int count)
+    private void Add(int count)
     {
         for (int i = 0; i < count; i++)
         {
-            Enemy b = Instantiate(enemyPrefab, transform);
-            b.gameObject.SetActive(false);
-            enemyQueue.Enqueue(b);
+            GameObject g = Instantiate(prefab, transform);
+            g.gameObject.SetActive(false);
+            queue.Enqueue(g);
         }
     }
 
-    public void ReturnToPool(Enemy b)
+    public void ReturnToPool(GameObject g)
     {
-        enemyQueue.Enqueue(b);
+        queue.Enqueue(g);
     }
 }
