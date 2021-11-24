@@ -7,11 +7,10 @@ public class LevelModifier : MonoBehaviour
     [SerializeField] private int level;
     private ObjectPool enemyPool;
 
-    private void Start()
+    private void Awake()
     {
-        level = 5;
+        level = 10;
         enemyPool = FindObjectOfType<ObjectPool>();
-        PlaceEnemies();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,18 +25,21 @@ public class LevelModifier : MonoBehaviour
 
     private void ChangeLevel()
     {
-        level++;
+        if (level < 11)
+        {
+            level++;
+        }
+
         ClearLevel();
         PlaceEnemies();
     }
 
-    private void PlaceEnemies()
+    public void PlaceEnemies()
     {
-        for (int i = 0; i < level; i++)
+        for (int i = 1; i < level; i++)
         {
             Enemy e = enemyPool.Get();
-            int r = Random.Range(25, 75);
-            e.transform.position = new Vector3(0, 0, r);
+            e.transform.position = new Vector3(0, 0, 100/level * i);
             e.gameObject.SetActive(true);
         }
     }

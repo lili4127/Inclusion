@@ -8,16 +8,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI livesText;
-    [SerializeField] private int playerLives = 3;
+    [SerializeField] private int playerLives = 99;
     public bool timerGoing { get; private set; }
     private float score = 0f;
     private float pointsPerSecond = 10;
+    private LevelModifier levelModifier;
 
     private void Awake()
     {
         timerGoing = false;
         scoreText.text = "0";
         livesText.text = "Lives: " + playerLives.ToString();
+        levelModifier = FindObjectOfType<LevelModifier>();
     }
 
     private void OnEnable()
@@ -56,8 +58,9 @@ public class GameManager : MonoBehaviour
     {
         score = 0f;
         scoreText.text = score.ToString();
-        playerLives = 3;
+        playerLives = 99;
         livesText.text = "Lives: " + playerLives.ToString();
+        levelModifier.PlaceEnemies();
         StartTimer();
     }
 

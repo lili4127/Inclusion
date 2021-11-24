@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private GameManager gameManager;
     private Rigidbody rb;
-    [SerializeField] private float movementSpeed = 100f;
+    private float movementSpeed = 700f;
 
     private void Awake()
     {
@@ -24,6 +24,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void ChangeSpeed()
     {
-        movementSpeed += 50;
+        if (movementSpeed < 700)
+        {
+            movementSpeed += 50;
+        }
+
+        return;
     }
 }

@@ -15,8 +15,7 @@ public class Enemy : MonoBehaviour
     public int activeMaterial { get; private set; }
     public static event System.Action playerHit;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         enemyPool = GetComponentInParent<ObjectPool>();
         particlePos = transform.GetChild(1).transform;
