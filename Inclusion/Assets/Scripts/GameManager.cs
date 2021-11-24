@@ -8,16 +8,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI livesText;
-    private bool timerGoing;
+    [SerializeField] private int playerLives = 3;
+    public bool timerGoing { get; private set; }
     private float score = 0f;
     private float pointsPerSecond = 10;
-    [SerializeField] private int playerLives = 3;
 
     private void Awake()
     {
         timerGoing = false;
         scoreText.text = "0";
-        livesText.text = "Lives: 3";
+        livesText.text = "Lives: " + playerLives.ToString();
+    }
+
+    private void OnEnable()
+    {
+        Enemy.playerHit += UpdateStrikes;
     }
 
     // Start is called before the first frame update
@@ -50,7 +55,9 @@ public class GameManager : MonoBehaviour
     private void BeginGame()
     {
         score = 0f;
+        scoreText.text = score.ToString();
         playerLives = 3;
+        livesText.text = "Lives: " + playerLives.ToString();
         StartTimer();
     }
 
@@ -83,8 +90,9 @@ public class GameManager : MonoBehaviour
     private void UpdateStrikes()
     {
         playerLives--;
+        livesText.text = "Lives: " + playerLives.ToString();
 
-        if(playerLives <= 0)
+        if (playerLives <= 0)
         {
             LoseGame();
         }
@@ -130,10 +138,16 @@ public class GameManager : MonoBehaviour
     {
         //panels[0].SetActive(false);
         //panels[1].SetActive(false);
+        score = 0f;
+        scoreText.text = score.ToString();
         playerLives = 3;
-        scoreText.text = "0";
-        livesText.text = "3";
+        livesText.text = "Lives: " + playerLives.ToString();
         Time.timeScale = 1f;
         StartCoroutine(CountdownToStart());
+    }
+
+    private void OnDisable()
+    {
+        Enemy.playerHit -= UpdateStrikes;
     }
 }
