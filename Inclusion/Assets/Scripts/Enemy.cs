@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private GameObject[] particleEffects;
     [SerializeField] private Material[] materials;
+    private ObjectPool enemyPool;
     private Transform particlePos;
     private Renderer rend;
     private Material yellow;
@@ -17,6 +18,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        enemyPool = GetComponentInParent<ObjectPool>();
         particlePos = transform.GetChild(1).transform;
         rend = GetComponentInChildren<Renderer>();
         yellow = materials[0];
@@ -51,13 +53,13 @@ public class Enemy : MonoBehaviour
             if (p.activeMaterial == activeMaterial)
             {
                 PlayEffect(p.activeMaterial);
-                Destroy(this.gameObject);
+                ResetEnemy();
             }
 
             else
             {
                 playerHit?.Invoke();
-                Destroy(this.gameObject);
+                ResetEnemy();
             }
         }
     }
@@ -66,5 +68,11 @@ public class Enemy : MonoBehaviour
     {
         GameObject spawnedVFX = Instantiate(particleEffects[materialNumber], particlePos.position, Quaternion.identity);
         Destroy(spawnedVFX, 1);
+    }
+
+    public void ResetEnemy()
+    {
+        this.gameObject.SetActive(false);
+        enemyPool.ReturnToPool(this);
     }
 }
