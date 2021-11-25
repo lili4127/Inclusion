@@ -7,17 +7,17 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private int playerLives = 99;
     public bool timerGoing { get; private set; }
     private float score = 0f;
     private float pointsPerSecond = 10;
-    private LevelModifier levelModifier;
+    private int level;
+    public static event System.Action<int> gameBegin;
 
     private void Awake()
     {
+        level = 5;
         timerGoing = false;
         scoreText.text = "0";
-        levelModifier = FindObjectOfType<LevelModifier>();
     }
 
     private void OnEnable()
@@ -54,10 +54,16 @@ public class GameManager : MonoBehaviour
 
     private void BeginGame()
     {
+        gameBegin?.Invoke(level);
         score = 0f;
         scoreText.text = score.ToString();
-        levelModifier.PlaceEnemies();
         StartTimer();
+    }
+
+    private void StartTimer()
+    {
+        timerGoing = true;
+        StartCoroutine(UpdateTimer());
     }
 
     IEnumerator UpdateTimer()
@@ -70,20 +76,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void StartTimer()
-    {
-        timerGoing = true;
-        StartCoroutine(UpdateTimer());
-    }
-
     private void StopTimer()
     {
         timerGoing = false;
-    }
-
-    private void UpdateScore()
-    {
-        score += 50;
     }
 
     private void LoseGame()
