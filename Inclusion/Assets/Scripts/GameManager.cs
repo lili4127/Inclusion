@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerColor.gameLost += LoseGame;
+        PlayerTrain.gameLost += LoseGame;
     }
 
     // Start is called before the first frame update
@@ -128,6 +128,6 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayerColor.gameLost -= LoseGame;
+        PlayerTrain.gameLost -= LoseGame;
     }
 }

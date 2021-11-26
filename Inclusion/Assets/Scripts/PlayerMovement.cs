@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     private float jumpForce;
     private Vector3 grav;
     [SerializeField] private bool isGrounded;
+    public static event System.Action<Vector3, float> playerJumped;
 
     private void Awake()
     {
@@ -30,10 +31,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+        if (gameManager.timerGoing && Input.GetKeyDown(KeyCode.W) && isGrounded)
         {
             isGrounded = false;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            playerJumped?.Invoke(transform.position, jumpForce);
         }
 
         if (gameManager.timerGoing)
