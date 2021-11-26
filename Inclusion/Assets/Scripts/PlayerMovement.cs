@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private Vector3 startOffset;
     private GameManager gameManager;
     private Rigidbody rb;
     private float movementSpeed;
@@ -12,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        startOffset = Vector3.zero + transform.position;
         gameManager = FindObjectOfType<GameManager>();
         rb = GetComponent<Rigidbody>();
     }
@@ -19,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         GameManager.gameBegin += StartGame;
+        LevelModifier.speedUp += SpeedUp;
+        LevelReset.levelChange += ChangeLevel;
     }
 
     private void StartGame(int l)
@@ -44,10 +48,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void ChangeLevel()
+    private void SpeedUp()
     {
-        transform.position = Vector3.zero;
-
         if (movementSpeed < 10)
         {
             movementSpeed += 1;
@@ -57,6 +59,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return;
+    }
+
+    private void ChangeLevel()
+    {
+        transform.position = Vector3.zero + startOffset;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -70,5 +77,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
         GameManager.gameBegin -= StartGame;
+        LevelModifier.speedUp -= SpeedUp;
+        LevelReset.levelChange -= ChangeLevel;
     }
 }

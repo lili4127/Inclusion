@@ -14,10 +14,10 @@ public class PlayerTrain : Character
     {
         activeChildColors = new List<int>();
 
-        foreach(Renderer r in childrenRenderers)
-        {
-            r.enabled = false;
-        }
+        //foreach(Renderer r in childrenRenderers)
+        //{
+        //    r.enabled = false;
+        //}
     }
 
     private void OnEnable()

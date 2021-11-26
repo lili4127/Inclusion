@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI speedingUpText;
     public bool timerGoing { get; private set; }
     private float score = 0f;
     private float pointsPerSecond = 10;
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         PlayerTrain.gameLost += LoseGame;
+        LevelModifier.speedUp += SpeedUp;
     }
 
     // Start is called before the first frame update
@@ -81,6 +83,25 @@ public class GameManager : MonoBehaviour
         timerGoing = false;
     }
 
+    private void SpeedUp()
+    {
+        StartCoroutine(SpeedUpCo());
+    }
+
+    IEnumerator SpeedUpCo()
+    {
+        float time = 0f;
+
+        while (time < 2f)
+        {
+            time += Time.deltaTime;
+            //speeding up text animation
+            speedingUpText.gameObject.SetActive(true);
+            yield return null;
+        }
+        speedingUpText.gameObject.SetActive(false);
+    }
+
     private void LoseGame()
     {
         StopTimer();
@@ -129,5 +150,6 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         PlayerTrain.gameLost -= LoseGame;
+        LevelModifier.speedUp -= SpeedUp;
     }
 }

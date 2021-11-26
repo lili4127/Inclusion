@@ -3,18 +3,20 @@ using UnityEngine;
 public class Child : MonoBehaviour
 {
     [SerializeField] private ParticleSystem pSystem;
+    [SerializeField] private Vector3 startOffset;
     private GameManager gameManager;
     private Rigidbody rb;
-    private Vector3 playerPos;
+    private Vector3 jumpPos;
     private float jumpForce;
     private float movementSpeed;
 
     private void Awake()
     {
+        startOffset = Vector3.zero + transform.position;
         gameManager = FindObjectOfType<GameManager>();
         rb = GetComponent<Rigidbody>();
-        playerPos = new Vector3(0, 0, 500f);
-        jumpForce = 500f;
+        jumpPos = new Vector3(0, 0, 500f);
+        jumpForce = 0f;
     }
 
     private void OnEnable()
@@ -22,6 +24,8 @@ public class Child : MonoBehaviour
         PlayerMovement.playerJumped += SetJump;
         GameManager.gameBegin += StartGame;
         PlayerTrain.destroyChild += DestroyChild;
+        LevelModifier.speedUp += SpeedUp;
+        LevelReset.levelChange += ChangeLevel;
     }
 
     private void StartGame(int l)
@@ -31,10 +35,10 @@ public class Child : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.z >= playerPos.z)
+        if (transform.position.z >= jumpPos.z)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            ResetChild();
+            ResetJump();
         }
 
         if (gameManager.timerGoing)
@@ -45,7 +49,7 @@ public class Child : MonoBehaviour
 
     private void SetJump(Vector3 pos, float force)
     {
-        playerPos = pos;
+        jumpPos = pos;
         jumpForce = force;
     }
 
@@ -56,10 +60,23 @@ public class Child : MonoBehaviour
         pSystem.Play();
     }
 
-    private void ResetChild()
+    private void SpeedUp()
     {
-        playerPos = new Vector3(0, 0, 500f);
-        jumpForce = 500f;
+        if (movementSpeed < 10)
+        {
+            movementSpeed += 1;
+        }
+        return;
+    }
+
+    private void ChangeLevel()
+    {
+        transform.position = Vector3.zero + startOffset;
+    }
+
+    private void ResetJump()
+    {
+        jumpPos = new Vector3(0, 0, 500f);
     }
 
     private void OnDisable()
@@ -67,5 +84,7 @@ public class Child : MonoBehaviour
         PlayerMovement.playerJumped -= SetJump;
         GameManager.gameBegin -= StartGame;
         PlayerTrain.destroyChild -= DestroyChild;
+        LevelModifier.speedUp -= SpeedUp;
+        LevelReset.levelChange -= ChangeLevel;
     }
 }
