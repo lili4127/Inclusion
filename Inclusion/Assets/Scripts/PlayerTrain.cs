@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class PlayerTrain : Character
 {
-    [SerializeField] private ParticleSystem bloodParticles;
+    [SerializeField] private GameObject bloodPrefab;
     [SerializeField] private List<Renderer> childrenRenderers;
+    private ParticleSystem pSystem;
+    private ParticleSystem.MainModule main1;
+    private ParticleSystem.MainModule main2;
+    private ParticleSystem.MainModule main3;
     private int activeChildren = 0;
-    [SerializeField] private List<int> activeChildColors;
+    private List<int> activeChildColors;
     public static event System.Action<int> destroyChild;
     public static event System.Action gameLost;
 
@@ -14,10 +18,15 @@ public class PlayerTrain : Character
     {
         activeChildColors = new List<int>();
 
-        //foreach(Renderer r in childrenRenderers)
-        //{
-        //    r.enabled = false;
-        //}
+        pSystem = bloodPrefab.GetComponent<ParticleSystem>();
+        main1 = bloodPrefab.GetComponent<ParticleSystem>().main;
+        main2 = bloodPrefab.transform.GetChild(0).GetComponent<ParticleSystem>().main;
+        main3 = bloodPrefab.transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>().main;
+
+        foreach (Renderer r in childrenRenderers)
+        {
+            r.enabled = false;
+        }
     }
 
     private void OnEnable()
@@ -43,10 +52,10 @@ public class PlayerTrain : Character
     {
         if (!activeChildColors.Contains(playerMaterial))
         {
-            //Debug.Log(playerMaterial.ToString());
-            //var main = bloodParticles.main;
-            //main.startColor = HelperClass.colors[playerMaterial];
-            //bloodParticles.Play();
+            main1.startColor = HelperClass.colors[playerMaterial];
+            main2.startColor = HelperClass.colors[playerMaterial];
+            main3.startColor = HelperClass.colors[playerMaterial];
+            pSystem.Play();
             rend.enabled = false;
             ClearLine();
             gameLost?.Invoke();

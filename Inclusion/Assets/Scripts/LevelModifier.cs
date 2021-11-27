@@ -49,7 +49,7 @@ public class LevelModifier : MonoBehaviour
         for (int i = 1; i < level * 2; i++)
         {
             GameObject e = enemyPool.Get();
-            e.transform.position = new Vector3(0, 0.5f, 200 / (level * 2) * i);
+            e.transform.position = new Vector3(0, 0f, 200 / (level * 2) * i);
             e.gameObject.SetActive(true);
 
             //if (Random.value > 0.7)
@@ -64,21 +64,21 @@ public class LevelModifier : MonoBehaviour
 
     private void ClearLevel()
     {
-        //foreach (Transform t in enemyPool.transform)
-        //{
-        //    if (t.gameObject.activeInHierarchy)
-        //    {
-        //        t.GetComponent<Enemy>().ResetEnemy();
-        //    }
-        //}
-
         foreach (Transform t in enemyPool.transform)
         {
             if (t.gameObject.activeInHierarchy)
             {
-                t.GetComponent<Stand>().ResetStand();
+                t.GetComponent<Enemy>().ResetEnemy();
             }
         }
+
+        //foreach (Transform t in standPool.transform)
+        //{
+        //    if (t.gameObject.activeInHierarchy)
+        //    {
+        //        t.GetComponent<Stand>().ResetStand();
+        //    }
+        //}
     }
 
     private void OnDisable()

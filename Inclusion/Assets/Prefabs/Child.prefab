@@ -687,7 +687,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a6643a2e54947cd97712cf94d11208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pSystem: {fileID: 7973196490134852774}
+  bloodPrefab: {fileID: 7973196490150333004}
+  startOffset: {x: 0, y: 0, z: 0}
 --- !u!54 &7973196490140513850
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1180,7 +1181,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 167524, guid: fdac75e990da47649b31f10049c400b0, type: 3}
       propertyPath: m_Name
-      value: BloodExplosion
+      value: ChildBloodExplosion
       objectReference: {fileID: 0}
     - target: {fileID: 493160, guid: fdac75e990da47649b31f10049c400b0, type: 3}
       propertyPath: m_RootOrder
@@ -1240,13 +1241,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fdac75e990da47649b31f10049c400b0, type: 3}
+--- !u!1 &7973196490150333004 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 167524, guid: fdac75e990da47649b31f10049c400b0, type: 3}
+  m_PrefabInstance: {fileID: 7973196490150495272}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7973196490150003264 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 493160, guid: fdac75e990da47649b31f10049c400b0, type: 3}
-  m_PrefabInstance: {fileID: 7973196490150495272}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &7973196490134852774 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19845262, guid: fdac75e990da47649b31f10049c400b0, type: 3}
   m_PrefabInstance: {fileID: 7973196490150495272}
   m_PrefabAsset: {fileID: 0}

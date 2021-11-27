@@ -152,7 +152,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 167524, guid: fdac75e990da47649b31f10049c400b0, type: 3}
       propertyPath: m_Name
-      value: BloodExplosion
+      value: PlayerBloodExplosion
       objectReference: {fileID: 0}
     - target: {fileID: 493160, guid: fdac75e990da47649b31f10049c400b0, type: 3}
       propertyPath: m_RootOrder
@@ -212,11 +212,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fdac75e990da47649b31f10049c400b0, type: 3}
---- !u!198 &452256992 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19845262, guid: fdac75e990da47649b31f10049c400b0, type: 3}
-  m_PrefabInstance: {fileID: 452256991}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &452256993 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 493160, guid: fdac75e990da47649b31f10049c400b0, type: 3}
@@ -701,7 +696,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 0
-  enemyPool: {fileID: 1859203551}
+  enemyPool: {fileID: 1321963501}
 --- !u!4 &806080839
 Transform:
   m_ObjectHideFlags: 0
@@ -1049,7 +1044,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: -0.67559016, z: 0, w: 0.7372774}
-  m_LocalPosition: {x: 8, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1222,12 +1217,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d504a07a91a2a4cc6847e84b1e9a2fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bloodParticles: {fileID: 452256992}
+  bloodPrefab: {fileID: 1200167282}
   childrenRenderers:
   - {fileID: 223103680}
   - {fileID: 2062897772}
   - {fileID: 2059616371}
-  activeChildColors: 
+--- !u!1 &1200167282 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 167524, guid: fdac75e990da47649b31f10049c400b0, type: 3}
+  m_PrefabInstance: {fileID: 452256991}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1321963500
 GameObject:
   m_ObjectHideFlags: 0

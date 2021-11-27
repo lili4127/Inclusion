@@ -2,8 +2,12 @@ using UnityEngine;
 
 public class Child : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem pSystem;
+    [SerializeField] private GameObject bloodPrefab;
     [SerializeField] private Vector3 startOffset;
+    private ParticleSystem pSystem;
+    private ParticleSystem.MainModule main1;
+    private ParticleSystem.MainModule main2;
+    private ParticleSystem.MainModule main3;
     private GameManager gameManager;
     private Rigidbody rb;
     private Vector3 jumpPos;
@@ -17,6 +21,11 @@ public class Child : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         jumpPos = new Vector3(0, 0, 500f);
         jumpForce = 0f;
+
+        pSystem = bloodPrefab.GetComponent<ParticleSystem>();
+        main1 = bloodPrefab.GetComponent<ParticleSystem>().main;
+        main2 = bloodPrefab.transform.GetChild(0).GetComponent<ParticleSystem>().main;
+        main3 = bloodPrefab.transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>().main;
     }
 
     private void OnEnable()
@@ -55,8 +64,9 @@ public class Child : MonoBehaviour
 
     private void DestroyChild(int playerMaterial)
     {
-        var main = pSystem.main;
-        main.startColor = HelperClass.colors[playerMaterial];
+        main1.startColor = HelperClass.colors[playerMaterial];
+        main2.startColor = HelperClass.colors[playerMaterial];
+        main3.startColor = HelperClass.colors[playerMaterial];
         pSystem.Play();
     }
 
