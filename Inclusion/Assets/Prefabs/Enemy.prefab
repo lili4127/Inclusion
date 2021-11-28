@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3943363268499464124}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 841789904242244864}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!136 &3943363268499464126
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -60,14 +60,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335c506cb981e4b83ab68a01d945a138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleEffects:
-  - {fileID: 157066, guid: d75bea4d6c9e81d419a11ed44c3c4718, type: 3}
-  - {fileID: 167524, guid: fdac75e990da47649b31f10049c400b0, type: 3}
-  - {fileID: 160684, guid: de85f8f81ea29ea479250adb36debd92, type: 3}
-  materials:
-  - {fileID: 2100000, guid: 6db85fc1002af7e44bf4ab4b4b085a16, type: 2}
-  - {fileID: 2100000, guid: 26dde8d170bfa354bbcbd9335444d55f, type: 2}
-  - {fileID: 2100000, guid: dfeaeb4277f8231449f41fc71bf91003, type: 2}
 --- !u!1 &5069253535261707040
 GameObject:
   m_ObjectHideFlags: 0
