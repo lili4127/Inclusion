@@ -54,15 +54,10 @@ public class PlayerTrain : Character
     {
         if (!activeChildColors.Contains(playerMaterial))
         {
-            main1.startColor = HelperClass.colors[playerMaterial];
-            main2.startColor = HelperClass.colors[playerMaterial];
-            main3.startColor = HelperClass.colors[playerMaterial];
-            pSystem.Play();
-            rend.enabled = false;
-            ClearLine();
-            gameLost?.Invoke();
+            DestroyTrain();
             return;
         }
+
         int indexToRemove = activeChildColors.IndexOf(playerMaterial);
         children[indexToRemove].PlayChildEffect(playerMaterial);
         activeChildColors.RemoveAt(indexToRemove);
@@ -85,6 +80,18 @@ public class PlayerTrain : Character
                 childrenRenderers[i].enabled = false;
             }
         }
+    }
+
+    public void DestroyTrain()
+    {
+        //HelperClass.colors[playerMaterial]
+        main1.startColor = rend.material.color;
+        main2.startColor = rend.material.color;
+        main3.startColor = rend.material.color;
+        pSystem.Play();
+        rend.enabled = false;
+        ClearLine();
+        gameLost?.Invoke();
     }
 
     private void ClearLine()

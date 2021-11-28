@@ -11,6 +11,14 @@ public class Stand : MonoBehaviour
         standPool = GetComponentInParent<ObjectPool>();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<PlayerTrain>(out PlayerTrain p))
+        {
+            p.DestroyTrain();
+        }
+    }
+
     public void ResetStand()
     {
         this.gameObject.SetActive(false);

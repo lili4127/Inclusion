@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        level = 5;
+        level = 10;
         timerGoing = false;
         scoreText.text = "0";
     }

@@ -697,6 +697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 0
   enemyPool: {fileID: 1321963501}
+  standPool: {fileID: 1859203551}
 --- !u!4 &806080839
 Transform:
   m_ObjectHideFlags: 0

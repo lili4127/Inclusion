@@ -4,13 +4,13 @@ public class LevelModifier : MonoBehaviour
 {
     [SerializeField] private int level;
     [SerializeField] private ObjectPool enemyPool;
-    //[SerializeField] private ObjectPool standPool;
+    [SerializeField] private ObjectPool standPool;
     public static event System.Action speedUp;
 
     private void Awake()
     {
         enemyPool = enemyPool.GetComponent<ObjectPool>();
-        //standPool = standPool.GetComponent<ObjectPool>();
+        standPool = standPool.GetComponent<ObjectPool>();
     }
 
     private void OnEnable()
@@ -52,13 +52,13 @@ public class LevelModifier : MonoBehaviour
             e.transform.position = new Vector3(0, 0f, 200 / (level * 2) * i);
             e.gameObject.SetActive(true);
 
-            //if (Random.value > 0.7)
-            //{
-            //    GameObject s = standPool.Get();
-            //    s.transform.position = new Vector3(0, 0.5f, 200 / (level * 2) * i);
-            //    e.transform.position += new Vector3(0, 0.5f, 0);
-            //    s.gameObject.SetActive(true);
-            //}
+            if (Random.value > 0.7)
+            {
+                GameObject s = standPool.Get();
+                s.transform.position = new Vector3(0, 0.5f, 200 / (level * 2) * i);
+                e.transform.position += new Vector3(0, 0.5f, 0);
+                s.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -72,13 +72,13 @@ public class LevelModifier : MonoBehaviour
             }
         }
 
-        //foreach (Transform t in standPool.transform)
-        //{
-        //    if (t.gameObject.activeInHierarchy)
-        //    {
-        //        t.GetComponent<Stand>().ResetStand();
-        //    }
-        //}
+        foreach (Transform t in standPool.transform)
+        {
+            if (t.gameObject.activeInHierarchy)
+            {
+                t.GetComponent<Stand>().ResetStand();
+            }
+        }
     }
 
     private void OnDisable()
