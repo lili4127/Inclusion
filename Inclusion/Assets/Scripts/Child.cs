@@ -63,9 +63,9 @@ public class Child : MonoBehaviour
 
     public void PlayChildEffect(int playerMaterial)
     {
-        main1.startColor = HelperClass.colors[playerMaterial];
-        main2.startColor = HelperClass.colors[playerMaterial];
-        main3.startColor = HelperClass.colors[playerMaterial];
+        main1.startColor = HelperClass.particleColors[playerMaterial];
+        main2.startColor = HelperClass.particleColors[playerMaterial];
+        main3.startColor = HelperClass.particleColors[playerMaterial];
         pSystem.Play();
     }
 

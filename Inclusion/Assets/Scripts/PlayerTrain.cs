@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerTrain : Character
+public class PlayerTrain : MonoBehaviour
 {
+    private Renderer rend;
+    private PlayerColor playerColor;
+
     //VFX
     [SerializeField] private GameObject bloodPrefab;
     private ParticleSystem pSystem;
@@ -19,6 +22,8 @@ public class PlayerTrain : Character
 
     private void Awake()
     {
+        playerColor = GetComponent<PlayerColor>();
+        rend = GetComponentInChildren<Renderer>();
         pSystem = bloodPrefab.GetComponent<ParticleSystem>();
         main1 = bloodPrefab.GetComponent<ParticleSystem>().main;
         main2 = bloodPrefab.transform.GetChild(0).GetComponent<ParticleSystem>().main;
@@ -44,7 +49,7 @@ public class PlayerTrain : Character
             return;
         }
 
-        childrenRenderers[activeChildren].material.color = HelperClass.colors[playerMaterial];
+        childrenRenderers[activeChildren].material.color = HelperClass.playerColors[playerMaterial];
         childrenRenderers[activeChildren].enabled = true;
         activeChildren++;
         activeChildColors.Add(playerMaterial);
@@ -58,11 +63,14 @@ public class PlayerTrain : Character
             return;
         }
 
-        int indexToRemove = activeChildColors.IndexOf(playerMaterial);
-        children[indexToRemove].PlayChildEffect(playerMaterial);
-        activeChildColors.RemoveAt(indexToRemove);
-        activeChildren--;
-        TightenUpLine();
+        else if (activeChildren > 0)
+        {
+            int indexToRemove = activeChildColors.IndexOf(playerMaterial);
+            children[indexToRemove].PlayChildEffect(playerMaterial);
+            activeChildColors.RemoveAt(indexToRemove);
+            activeChildren--;
+            TightenUpLine();
+        }
     }
 
     private void TightenUpLine()
@@ -71,7 +79,7 @@ public class PlayerTrain : Character
         {
             if (i < activeChildColors.Count)
             {
-                childrenRenderers[i].material.color = HelperClass.colors[activeChildColors[i]];
+                childrenRenderers[i].material.color = HelperClass.playerColors[activeChildColors[i]];
                 childrenRenderers[i].enabled = true;
             }
 
@@ -84,18 +92,12 @@ public class PlayerTrain : Character
 
     public void DestroyTrain()
     {
-        //HelperClass.colors[playerMaterial]
-        main1.startColor = rend.material.color;
-        main2.startColor = rend.material.color;
-        main3.startColor = rend.material.color;
+        main1.startColor = HelperClass.particleColors[playerColor.activeMaterial];
+        main2.startColor = HelperClass.particleColors[playerColor.activeMaterial];
+        main3.startColor = HelperClass.particleColors[playerColor.activeMaterial];
         pSystem.Play();
         rend.enabled = false;
-        ClearLine();
-        gameLost?.Invoke();
-    }
 
-    private void ClearLine()
-    {
         if (activeChildren > 0)
         {
             for (int i = 0; i < activeChildren; i++)
@@ -107,6 +109,7 @@ public class PlayerTrain : Character
 
         activeChildColors.Clear();
         activeChildren = 0;
+        gameLost?.Invoke();
     }
 
     private void OnDisable()

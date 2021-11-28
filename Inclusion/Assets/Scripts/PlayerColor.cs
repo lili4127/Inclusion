@@ -1,9 +1,24 @@
 using UnityEngine;
 
-public class PlayerColor : Character
+public class PlayerColor : MonoBehaviour
 {
     [SerializeField] private ParticleSystem pSystem;
     [SerializeField] private AudioSource particleSound;
+    private Renderer rend;
+    public int activeMaterial { get; private set; }
+
+    private void Awake()
+    {
+        rend = GetComponentInChildren<Renderer>();
+        SetRandomMaterial();
+    }
+
+    private void SetRandomMaterial()
+    {
+        int r = Random.Range(0, HelperClass.playerColors.Count);
+        rend.material.color = HelperClass.playerColors[r];
+        activeMaterial = r;
+    }
 
     private void Update()
     {
@@ -32,12 +47,7 @@ public class PlayerColor : Character
 
         pSystem.Play();
         particleSound.Play();
-        rend.material.color = HelperClass.colors[i];
+        rend.material.color = HelperClass.playerColors[i];
         activeMaterial = i;
-    }
-
-    public int GetActiveMaterial()
-    {
-        return activeMaterial;
     }
 }
