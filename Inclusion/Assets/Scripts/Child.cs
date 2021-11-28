@@ -32,7 +32,6 @@ public class Child : MonoBehaviour
     {
         PlayerMovement.playerJumped += SetJump;
         GameManager.gameBegin += StartGame;
-        PlayerTrain.destroyChild += DestroyChild;
         LevelModifier.speedUp += SpeedUp;
         LevelReset.levelChange += ChangeLevel;
     }
@@ -62,7 +61,7 @@ public class Child : MonoBehaviour
         jumpForce = force;
     }
 
-    private void DestroyChild(int playerMaterial)
+    public void PlayChildEffect(int playerMaterial)
     {
         main1.startColor = HelperClass.colors[playerMaterial];
         main2.startColor = HelperClass.colors[playerMaterial];
@@ -93,7 +92,6 @@ public class Child : MonoBehaviour
     {
         PlayerMovement.playerJumped -= SetJump;
         GameManager.gameBegin -= StartGame;
-        PlayerTrain.destroyChild -= DestroyChild;
         LevelModifier.speedUp -= SpeedUp;
         LevelReset.levelChange -= ChangeLevel;
     }

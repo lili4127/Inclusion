@@ -3,26 +3,28 @@ using UnityEngine;
 
 public class PlayerTrain : Character
 {
+    //VFX
     [SerializeField] private GameObject bloodPrefab;
-    [SerializeField] private List<Renderer> childrenRenderers;
     private ParticleSystem pSystem;
     private ParticleSystem.MainModule main1;
     private ParticleSystem.MainModule main2;
     private ParticleSystem.MainModule main3;
+
+    //Children
+    [SerializeField] private List<Child> children;
+    [SerializeField] private List<Renderer> childrenRenderers;
     private int activeChildren = 0;
     private List<int> activeChildColors;
-    public static event System.Action<int> destroyChild;
     public static event System.Action gameLost;
 
     private void Awake()
     {
-        activeChildColors = new List<int>();
-
         pSystem = bloodPrefab.GetComponent<ParticleSystem>();
         main1 = bloodPrefab.GetComponent<ParticleSystem>().main;
         main2 = bloodPrefab.transform.GetChild(0).GetComponent<ParticleSystem>().main;
         main3 = bloodPrefab.transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>().main;
 
+        activeChildColors = new List<int>();
         foreach (Renderer r in childrenRenderers)
         {
             r.enabled = false;
@@ -61,8 +63,8 @@ public class PlayerTrain : Character
             gameLost?.Invoke();
             return;
         }
-        destroyChild?.Invoke(playerMaterial);
         int indexToRemove = activeChildColors.IndexOf(playerMaterial);
+        children[indexToRemove].PlayChildEffect(playerMaterial);
         activeChildColors.RemoveAt(indexToRemove);
         activeChildren--;
         TightenUpLine();
@@ -91,7 +93,7 @@ public class PlayerTrain : Character
         {
             for (int i = 0; i < activeChildren; i++)
             {
-                destroyChild?.Invoke(activeChildColors[i]);
+                children[i].PlayChildEffect(activeChildColors[i]);
                 childrenRenderers[i].enabled = false;
             }
         }
