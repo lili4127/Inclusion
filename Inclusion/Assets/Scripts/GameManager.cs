@@ -16,9 +16,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        level = 10;
+        level = 5;
         timerGoing = false;
-        scoreText.text = "0";
+        scoreText.text = "0m";
     }
 
     private void OnEnable()
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         while (timerGoing)
         {
             score += pointsPerSecond * Time.deltaTime;
-            scoreText.text = Mathf.FloorToInt(score).ToString();
+            scoreText.text = Mathf.FloorToInt(score).ToString() + "m";
             yield return null;
         }
     }
