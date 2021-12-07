@@ -5,9 +5,8 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI countdownText;
-    [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private TextMeshProUGUI speedingUpText;
+    [SerializeField] private TextMeshProUGUI[] texts;
+    [SerializeField] private GameObject[] panels;
     public bool timerGoing { get; private set; }
     private float score = 0f;
     private float pointsPerSecond = 10;
@@ -18,7 +17,6 @@ public class GameManager : MonoBehaviour
     {
         level = 5;
         timerGoing = false;
-        scoreText.text = "0m";
     }
 
     private void OnEnable()
@@ -37,20 +35,20 @@ public class GameManager : MonoBehaviour
     IEnumerator CountdownToStart()
     {
         int countdownTime = 3;
-        countdownText.text = countdownTime.ToString();
-        countdownText.gameObject.SetActive(true);
+        texts[0].text = countdownTime.ToString();
+        texts[0].gameObject.SetActive(true);
         yield return new WaitForSeconds(0.25f);
 
         while (countdownTime > 0)
         {
-            countdownText.text = countdownTime.ToString();
+            texts[0].text = countdownTime.ToString();
             yield return new WaitForSeconds(1f);
             countdownTime--;
         }
 
-        countdownText.text = "GO!";
+        texts[0].text = "GO!";
         yield return new WaitForSeconds(1f);
-        countdownText.gameObject.SetActive(false);
+        texts[0].gameObject.SetActive(false);
         BeginGame();
     }
 
@@ -58,7 +56,8 @@ public class GameManager : MonoBehaviour
     {
         gameBegin?.Invoke(level);
         score = 0f;
-        scoreText.text = score.ToString();
+        texts[1].text = score.ToString() + "m";
+        texts[1].gameObject.SetActive(true);
         StartTimer();
     }
 
@@ -73,7 +72,7 @@ public class GameManager : MonoBehaviour
         while (timerGoing)
         {
             score += pointsPerSecond * Time.deltaTime;
-            scoreText.text = Mathf.FloorToInt(score).ToString() + "m";
+            texts[1].text = Mathf.FloorToInt(score).ToString() + "m";
             yield return null;
         }
     }
@@ -96,30 +95,30 @@ public class GameManager : MonoBehaviour
         {
             time += Time.deltaTime;
             //speeding up text animation
-            speedingUpText.gameObject.SetActive(true);
+            texts[2].gameObject.SetActive(true);
             yield return null;
         }
-        speedingUpText.gameObject.SetActive(false);
+        texts[2].gameObject.SetActive(false);
     }
 
     private void LoseGame()
     {
         StopTimer();
 
-        //if (PlayerPrefs.GetInt("highscore", 0) < Mathf.FloorToInt(score))
-        //{
-        //    texts[2].text = "New High Score!";
-        //    texts[3].text = texts[1].text;
-        //    PlayerPrefs.SetInt("highscore", Mathf.FloorToInt(score));
-        //}
+        if (PlayerPrefs.GetInt("highscore", 0) < Mathf.FloorToInt(score))
+        {
+            texts[3].text = "New High Score!";
+            texts[4].text = texts[1].text;
+            PlayerPrefs.SetInt("highscore", Mathf.FloorToInt(score));
+        }
 
-        //else
-        //{
-        //    texts[2].text = "Final Score: " + texts[1].text;
-        //    texts[3].text = "High Score: " + PlayerPrefs.GetInt("highscore", 0).ToString();
-        //}
+        else
+        {
+            texts[3].text = "Final Score: " + texts[1].text;
+            texts[4].text = "High Score: " + PlayerPrefs.GetInt("highscore", 0).ToString() + "m";
+        }
 
-        //panels[1].SetActive(true);
+        panels[1].SetActive(true);
     }
 
     public void PauseGame()
@@ -142,7 +141,7 @@ public class GameManager : MonoBehaviour
         //panels[0].SetActive(false);
         //panels[1].SetActive(false);
         score = 0f;
-        scoreText.text = score.ToString();
+        texts[1].text = score.ToString();
         Time.timeScale = 1f;
         StartCoroutine(CountdownToStart());
     }

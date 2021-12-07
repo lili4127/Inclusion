@@ -1,8 +1,10 @@
 using UnityEngine;
+using TMPro;
 
-public class AudioManager : MonoBehaviour
+public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] private GameObject muteToggle;
+    [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private bool isMute;
 
     private void Awake()
@@ -18,6 +20,8 @@ public class AudioManager : MonoBehaviour
             muteToggle.SetActive(false);
             isMute = false;
         }
+
+        scoreText.text = "High Score: " + PlayerPrefs.GetInt("highscore", 0).ToString() + "m";
     }
 
     public void Mute()
@@ -25,5 +29,11 @@ public class AudioManager : MonoBehaviour
         isMute = !isMute;
         AudioListener.volume = isMute ? 0 : 1;
         muteToggle.SetActive(!muteToggle.activeInHierarchy);
+    }
+
+    public void ResetHighscore()
+    {
+        scoreText.text = "High Score: " + "0m";
+        PlayerPrefs.SetInt("highscore", 0);
     }
 }
