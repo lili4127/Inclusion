@@ -1,18 +1,42 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private ObjectPool enemyPool;
     public static event System.Action<int> playerAdded;
     public static event System.Action<int> playerRemoved;
     private Renderer rend;
     private int activeMaterial;
 
+    private EnemyPool enemyPool;
+    private float difficulty;
+
     private void Awake()
     {
-        enemyPool = GetComponentInParent<ObjectPool>();
         rend = GetComponentInChildren<Renderer>();
+        enemyPool = GetComponentInParent<EnemyPool>();
+        difficulty = PlayerPrefs.GetInt("difficulty", 1);
+    }
+
+    public void Move()
+    {
         SetRandomMaterial();
+        StartCoroutine(MoveCo(enemyPool.endPos, difficulty));
+    }
+
+    IEnumerator MoveCo(Vector3 targetPosition, float duration)
+    {
+        float time = 0;
+        Vector3 startPosition = transform.position;
+
+        while (time < duration)
+        {
+            transform.position = Vector3.Lerp(startPosition, targetPosition, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = targetPosition;
+        enemyPool.ReturnToPool(this);
     }
 
     private void SetRandomMaterial()
@@ -29,20 +53,12 @@ public class Enemy : MonoBehaviour
             if (this.activeMaterial == p.activeMaterial)
             {
                 playerRemoved?.Invoke(this.activeMaterial);
-                ResetEnemy();
             }
 
             else
             {
                 playerAdded?.Invoke(this.activeMaterial);
-                ResetEnemy();
             }
         }
-    }
-
-    public void ResetEnemy()
-    {
-        this.gameObject.SetActive(false);
-        enemyPool.ReturnToPool(this.gameObject);
     }
 }

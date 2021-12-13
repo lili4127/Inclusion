@@ -1,27 +1,22 @@
+using System.Collections;
 using UnityEngine;
 
 public class Child : MonoBehaviour
 {
     [SerializeField] private GameObject bloodPrefab;
-    [SerializeField] private Vector3 startOffset;
     private ParticleSystem pSystem;
     private ParticleSystem.MainModule main1;
     private ParticleSystem.MainModule main2;
     private ParticleSystem.MainModule main3;
-    private GameManager gameManager;
     private Rigidbody rb;
-    private Vector3 jumpPos;
     private float jumpForce;
-    private float movementSpeed;
+    private float startOffset;
+    private float difficulty;
 
     private void Awake()
     {
-        startOffset = Vector3.zero + transform.position;
-        gameManager = FindObjectOfType<GameManager>();
+        startOffset = Mathf.Abs(transform.position.z) / 3;
         rb = GetComponent<Rigidbody>();
-        jumpPos = new Vector3(0, 0, 500f);
-        jumpForce = 0f;
-
         pSystem = bloodPrefab.GetComponent<ParticleSystem>();
         main1 = bloodPrefab.GetComponent<ParticleSystem>().main;
         main2 = bloodPrefab.transform.GetChild(0).GetComponent<ParticleSystem>().main;
@@ -30,35 +25,33 @@ public class Child : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerMovement.playerJumped += SetJump;
         GameManager.gameBegin += StartGame;
-        LevelModifier.speedUp += SpeedUp;
-        LevelReset.levelChange += ChangeLevel;
+        PlayerMovement.playerJumped += Jump;
     }
 
-    private void StartGame(int l)
+    private void StartGame(int d)
     {
-        movementSpeed = l;
+        jumpForce = 24f + d;
+        Physics.gravity = new Vector3(0, -9.8f - d, 0);
+        difficulty = d;
     }
 
-    private void Update()
+    private void Jump()
     {
-        if (transform.position.z >= jumpPos.z)
+        StartCoroutine(JumpCo());
+    }
+
+    IEnumerator JumpCo()
+    {
+        float time = 0f;
+
+        while (time < startOffset/difficulty)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            ResetJump();
+            time += Time.deltaTime;
+            yield return null;
         }
 
-        if (gameManager.timerGoing)
-        {
-            transform.position += Vector3.forward * movementSpeed * Time.deltaTime;
-        }
-    }
-
-    private void SetJump(Vector3 pos, float force)
-    {
-        jumpPos = pos;
-        jumpForce = force;
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     public void PlayChildEffect(int playerMaterial)
@@ -69,30 +62,8 @@ public class Child : MonoBehaviour
         pSystem.Play();
     }
 
-    private void SpeedUp()
-    {
-        if (movementSpeed < 10)
-        {
-            movementSpeed += 1;
-        }
-        return;
-    }
-
-    private void ChangeLevel()
-    {
-        transform.position = Vector3.zero + startOffset;
-    }
-
-    private void ResetJump()
-    {
-        jumpPos = new Vector3(0, 0, 500f);
-    }
-
     private void OnDisable()
     {
-        PlayerMovement.playerJumped -= SetJump;
         GameManager.gameBegin -= StartGame;
-        LevelModifier.speedUp -= SpeedUp;
-        LevelReset.levelChange -= ChangeLevel;
     }
 }

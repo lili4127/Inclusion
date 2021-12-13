@@ -2,35 +2,26 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private Vector3 startOffset;
-    private GameManager gameManager;
+    [SerializeField] private GameManager gameManager;
     private Rigidbody rb;
-    private float movementSpeed;
     private float jumpForce;
-    private Vector3 grav;
     [SerializeField] private bool isGrounded;
-    public static event System.Action<Vector3, float> playerJumped;
+    public static event System.Action playerJumped;
 
     private void Awake()
     {
-        startOffset = Vector3.zero + transform.position;
-        gameManager = FindObjectOfType<GameManager>();
         rb = GetComponent<Rigidbody>();
     }
 
     private void OnEnable()
     {
         GameManager.gameBegin += StartGame;
-        LevelModifier.speedUp += SpeedUp;
-        LevelReset.levelChange += ChangeLevel;
     }
 
-    private void StartGame(int l)
+    private void StartGame(int d)
     {
-        movementSpeed = l;
-        jumpForce = 20f + l;
-        grav = new Vector3(0, -5f - l, 0);
-        Physics.gravity = grav;
+        jumpForce = 24f + d;
+        Physics.gravity = new Vector3(0, -9.8f - d, 0);
     }
 
     private void Update()
@@ -39,31 +30,8 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = false;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            playerJumped?.Invoke(transform.position, jumpForce);
+            playerJumped?.Invoke();
         }
-
-        if (gameManager.timerGoing)
-        {
-           transform.position += Vector3.forward * movementSpeed * Time.deltaTime;
-        }
-    }
-
-    private void SpeedUp()
-    {
-        if (movementSpeed < 10)
-        {
-            movementSpeed += 1;
-            jumpForce += 1;
-            grav += Vector3.down;
-            Physics.gravity = grav;
-        }
-
-        return;
-    }
-
-    private void ChangeLevel()
-    {
-        transform.position = Vector3.zero + startOffset;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -77,7 +45,5 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
         GameManager.gameBegin -= StartGame;
-        LevelModifier.speedUp -= SpeedUp;
-        LevelReset.levelChange -= ChangeLevel;
     }
 }

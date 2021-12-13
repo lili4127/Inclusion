@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -10,19 +9,19 @@ public class GameManager : MonoBehaviour
     public bool timerGoing { get; private set; }
     private float score = 0f;
     private float pointsPerSecond = 10;
-    private int level;
     public static event System.Action<int> gameBegin;
+
+    [SerializeField] private SpikePool spikePool;
 
     private void Awake()
     {
-        level = 5;
         timerGoing = false;
+        spikePool = spikePool.GetComponent<SpikePool>();
     }
 
     private void OnEnable()
     {
         PlayerTrain.gameLost += LoseGame;
-        LevelModifier.speedUp += SpeedUp;
     }
 
     // Start is called before the first frame update
@@ -54,7 +53,7 @@ public class GameManager : MonoBehaviour
 
     private void BeginGame()
     {
-        gameBegin?.Invoke(level);
+        gameBegin?.Invoke(PlayerPrefs.GetInt("difficulty",1));
         score = 0f;
         texts[1].text = score.ToString() + "m";
         texts[1].gameObject.SetActive(true);
@@ -65,6 +64,7 @@ public class GameManager : MonoBehaviour
     {
         timerGoing = true;
         StartCoroutine(UpdateTimer());
+        StartCoroutine(SpawnObstacles(PlayerPrefs.GetInt("difficulty", 1)));
     }
 
     IEnumerator UpdateTimer()
@@ -82,23 +82,15 @@ public class GameManager : MonoBehaviour
         timerGoing = false;
     }
 
-    private void SpeedUp()
+    IEnumerator SpawnObstacles(int difficulty)
     {
-        StartCoroutine(SpeedUpCo());
-    }
-
-    IEnumerator SpeedUpCo()
-    {
-        float time = 0f;
-
-        while (time < 2f)
+        while (timerGoing)
         {
-            time += Time.deltaTime;
-            //speeding up text animation
-            texts[2].gameObject.SetActive(true);
-            yield return null;
+            Spike spike = spikePool.Get();
+            spike.gameObject.SetActive(true);
+            spike.Move();
+            yield return new WaitForSeconds(difficulty);
         }
-        texts[2].gameObject.SetActive(false);
     }
 
     private void LoseGame()
@@ -149,6 +141,5 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         PlayerTrain.gameLost -= LoseGame;
-        LevelModifier.speedUp -= SpeedUp;
     }
 }

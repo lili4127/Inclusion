@@ -651,7 +651,7 @@ GameObject:
   - component: {fileID: 7973196490140513852}
   - component: {fileID: 7973196490140513853}
   - component: {fileID: 7973196490140513850}
-  - component: {fileID: 7973196490140513851}
+  - component: {fileID: 4841119188573991281}
   m_Layer: 0
   m_Name: Child
   m_TagString: Untagged
@@ -688,7 +688,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bloodPrefab: {fileID: 7973196490150333004}
-  startOffset: {x: 0, y: 0, z: 0}
 --- !u!54 &7973196490140513850
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -705,7 +704,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!136 &7973196490140513851
+--- !u!136 &4841119188573991281
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
