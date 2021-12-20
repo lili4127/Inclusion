@@ -9,14 +9,14 @@ public class Child : MonoBehaviour
     private ParticleSystem.MainModule main2;
     private ParticleSystem.MainModule main3;
     private Rigidbody rb;
+    private Animator anim;
     private float jumpForce;
     private float startOffset;
-    private float difficulty;
 
     private void Awake()
     {
-        startOffset = Mathf.Abs(transform.position.z) / 3;
         rb = GetComponent<Rigidbody>();
+        anim = GetComponentInChildren<Animator>();
         pSystem = bloodPrefab.GetComponent<ParticleSystem>();
         main1 = bloodPrefab.GetComponent<ParticleSystem>().main;
         main2 = bloodPrefab.transform.GetChild(0).GetComponent<ParticleSystem>().main;
@@ -27,13 +27,14 @@ public class Child : MonoBehaviour
     {
         GameManager.gameBegin += StartGame;
         PlayerMovement.playerJumped += Jump;
+        PlayerMovement.playerSlide += Slide;
     }
 
     private void StartGame(int d)
     {
         jumpForce = 24f + d;
         Physics.gravity = new Vector3(0, -9.8f - d, 0);
-        difficulty = d;
+        startOffset = Mathf.Abs(transform.position.z) / d;
     }
 
     private void Jump()
@@ -41,17 +42,37 @@ public class Child : MonoBehaviour
         StartCoroutine(JumpCo());
     }
 
+    private void Slide()
+    {
+        StartCoroutine(SlideCo());
+    }
+
     IEnumerator JumpCo()
     {
         float time = 0f;
 
-        while (time < startOffset/difficulty)
+        while (time < startOffset)
         {
             time += Time.deltaTime;
             yield return null;
         }
 
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
+    IEnumerator SlideCo()
+    {
+        float time = 0f;
+
+        while (time < startOffset)
+        {
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        anim.SetBool("isSliding", true);
+        yield return new WaitForSeconds(1f);
+        anim.SetBool("isSliding", false);
     }
 
     public void PlayChildEffect(int playerMaterial)

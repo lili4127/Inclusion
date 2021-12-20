@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     private float score = 0f;
     private float pointsPerSecond = 10;
     public static event System.Action<int> gameBegin;
-
     [SerializeField] private ObjectPool pool;
 
     private void Awake()
@@ -52,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     private void BeginGame()
     {
-        gameBegin?.Invoke(PlayerPrefs.GetInt("difficulty",1));
+        gameBegin?.Invoke(PlayerPrefs.GetInt("difficulty",4));
         score = 0f;
         texts[1].text = score.ToString() + "m";
         texts[1].gameObject.SetActive(true);
@@ -63,8 +62,7 @@ public class GameManager : MonoBehaviour
     {
         timerGoing = true;
         StartCoroutine(UpdateTimer());
-        StartCoroutine(SpawnObstacles(5f));
-        //StartCoroutine(SpawnObstacles(PlayerPrefs.GetInt("difficulty", 1)));
+        StartCoroutine(SpawnObstacles(PlayerPrefs.GetInt("difficulty", 4)));
     }
 
     IEnumerator UpdateTimer()
@@ -88,8 +86,8 @@ public class GameManager : MonoBehaviour
         {
             GameObject g = pool.Get();
             g.gameObject.SetActive(true);
-            StartCoroutine(MoveCo(g, new Vector3(pool.endPos.x, g.transform.position.y, pool.endPos.z), difficulty));
-            yield return new WaitForSeconds(difficulty + 0.25f);
+            StartCoroutine(MoveCo(g, new Vector3(pool.endPos.x, g.transform.position.y, pool.endPos.z), difficulty * 1.5f));
+            yield return new WaitForSeconds(difficulty * 2);
         }
     }
 
