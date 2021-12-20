@@ -11,12 +11,11 @@ public class GameManager : MonoBehaviour
     private float pointsPerSecond = 10;
     public static event System.Action<int> gameBegin;
 
-    [SerializeField] private SpikePool spikePool;
+    [SerializeField] private ObjectPool pool;
 
     private void Awake()
     {
         timerGoing = false;
-        spikePool = spikePool.GetComponent<SpikePool>();
     }
 
     private void OnEnable()
@@ -64,7 +63,8 @@ public class GameManager : MonoBehaviour
     {
         timerGoing = true;
         StartCoroutine(UpdateTimer());
-        StartCoroutine(SpawnObstacles(PlayerPrefs.GetInt("difficulty", 1)));
+        StartCoroutine(SpawnObstacles(5f));
+        //StartCoroutine(SpawnObstacles(PlayerPrefs.GetInt("difficulty", 1)));
     }
 
     IEnumerator UpdateTimer()
@@ -82,15 +82,30 @@ public class GameManager : MonoBehaviour
         timerGoing = false;
     }
 
-    IEnumerator SpawnObstacles(int difficulty)
+    IEnumerator SpawnObstacles(float difficulty)
     {
         while (timerGoing)
         {
-            Spike spike = spikePool.Get();
-            spike.gameObject.SetActive(true);
-            spike.Move();
-            yield return new WaitForSeconds(difficulty);
+            GameObject g = pool.Get();
+            g.gameObject.SetActive(true);
+            StartCoroutine(MoveCo(g, new Vector3(pool.endPos.x, g.transform.position.y, pool.endPos.z), difficulty));
+            yield return new WaitForSeconds(difficulty + 0.25f);
         }
+    }
+
+    IEnumerator MoveCo(GameObject g, Vector3 targetPosition, float duration)
+    {
+        float time = 0;
+        Vector3 startPosition = g.transform.position;
+
+        while (time < duration)
+        {
+            g.transform.position = Vector3.Lerp(startPosition, targetPosition, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        g.transform.position = targetPosition;
+        pool.ReturnToPool(g);
     }
 
     private void LoseGame()
