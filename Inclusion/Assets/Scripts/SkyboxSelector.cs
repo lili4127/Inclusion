@@ -11,7 +11,7 @@ public class SkyboxSelector : MonoBehaviour
         sky.material = skyboxes[PlayerPrefs.GetInt("sky", 0)];
     }
 
-    public void Changeskybox(int i)
+    public void ChangeSkybox(int i)
     {
         sky.material = skyboxes[i];
         PlayerPrefs.SetInt("sky", i);

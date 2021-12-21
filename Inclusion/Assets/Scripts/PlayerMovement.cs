@@ -4,12 +4,15 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private bool isGrounded;
-    [SerializeField] private bool isSliding = false;
     private Animator anim;
     private Rigidbody rb;
     private CapsuleCollider col;
-    private float jumpForce;
+    private bool isGrounded;
+    private bool isSliding = false;
+    public static bool jumpPressed = false;
+    private float jumpForce = 24f;
+    private float fallMultiplier = 2.5f;
+    private float lowJumpMultiplier = 2.5f;
     public static event System.Action playerJumped;
     public static event System.Action playerSlide;
 
@@ -18,17 +21,6 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
-    }
-
-    private void OnEnable()
-    {
-        GameManager.gameBegin += StartGame;
-    }
-
-    private void StartGame(int d)
-    {
-        jumpForce = 24f + d;
-        Physics.gravity = new Vector3(0, -9.8f - d, 0);
     }
 
     private void Update()
@@ -40,10 +32,33 @@ public class PlayerMovement : MonoBehaviour
             playerJumped?.Invoke();
         }
 
-        else if (gameManager.timerGoing && Input.GetKeyDown(KeyCode.E) && !isSliding)
+        if (gameManager.timerGoing && Input.GetKey(KeyCode.W))
+        {
+            jumpPressed = true;
+        }
+
+        else
+        {
+            jumpPressed = false;
+        }
+
+        if (gameManager.timerGoing && Input.GetKeyDown(KeyCode.E) && !isSliding)
         {
             playerSlide?.Invoke();
             StartCoroutine(SlideCo());
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if(rb.velocity.y < 0)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+        }
+
+        else if (rb.velocity.y > 0 && !jumpPressed)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
         }
     }
 
@@ -66,10 +81,5 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = true;
         }
-    }
-
-    private void OnDisable()
-    {
-        GameManager.gameBegin -= StartGame;
     }
 }

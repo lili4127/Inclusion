@@ -408,7 +408,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1773881364}
         m_TargetAssemblyTypeName: SkyboxSelector, Assembly-CSharp
-        m_MethodName: Changeskybox
+        m_MethodName: ChangeSkybox
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1169,7 +1169,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1773881364}
         m_TargetAssemblyTypeName: SkyboxSelector, Assembly-CSharp
-        m_MethodName: Changeskybox
+        m_MethodName: ChangeSkybox
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1625,7 +1625,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 549505163795f4bb49a5f165178c6b28, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5478024ff26e844caa47ba675b282941, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -2307,7 +2307,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 94.3
+  m_fontSize: 89.3
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2442,7 +2442,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1773881364}
         m_TargetAssemblyTypeName: SkyboxSelector, Assembly-CSharp
-        m_MethodName: Changeskybox
+        m_MethodName: ChangeSkybox
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2919,7 +2919,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1773881364}
         m_TargetAssemblyTypeName: SkyboxSelector, Assembly-CSharp
-        m_MethodName: Changeskybox
+        m_MethodName: ChangeSkybox
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

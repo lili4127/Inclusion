@@ -10,7 +10,9 @@ public class Child : MonoBehaviour
     private ParticleSystem.MainModule main3;
     private Rigidbody rb;
     private Animator anim;
-    private float jumpForce;
+    private float jumpForce = 24f;
+    private float fallMultiplier = 2.5f;
+    private float lowJumpMultiplier = 2.5f;
     private float startOffset;
 
     private void Awake()
@@ -21,20 +23,13 @@ public class Child : MonoBehaviour
         main1 = bloodPrefab.GetComponent<ParticleSystem>().main;
         main2 = bloodPrefab.transform.GetChild(0).GetComponent<ParticleSystem>().main;
         main3 = bloodPrefab.transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>().main;
+        startOffset = Mathf.Abs(transform.position.z)/3;
     }
 
     private void OnEnable()
     {
-        GameManager.gameBegin += StartGame;
         PlayerMovement.playerJumped += Jump;
         PlayerMovement.playerSlide += Slide;
-    }
-
-    private void StartGame(int d)
-    {
-        jumpForce = 24f + d;
-        Physics.gravity = new Vector3(0, -9.8f - d, 0);
-        startOffset = Mathf.Abs(transform.position.z) / d;
     }
 
     private void Jump()
@@ -75,6 +70,19 @@ public class Child : MonoBehaviour
         anim.SetBool("isSliding", false);
     }
 
+    private void FixedUpdate()
+    {
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+        }
+
+        else if (rb.velocity.y > 0 && !PlayerMovement.jumpPressed)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
+        }
+    }
+
     public void PlayChildEffect(int playerMaterial)
     {
         main1.startColor = HelperClass.particleColors[playerMaterial];
@@ -85,6 +93,7 @@ public class Child : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.gameBegin -= StartGame;
+        PlayerMovement.playerJumped -= Jump;
+        PlayerMovement.playerSlide -= Slide;
     }
 }
