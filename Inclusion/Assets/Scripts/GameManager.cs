@@ -15,13 +15,17 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         timerGoing = false;
-        screens[0].SetActive(true);
-        screens[1].SetActive(false);
     }
 
     private void OnEnable()
     {
         PlayerTrain.gameLost += LoseGame;
+    }
+
+    public void ToggleSettings()
+    {
+        //screens[0].SetActive(!screens[0].activeInHierarchy);
+        screens[2].SetActive(!screens[2].activeInHierarchy);
     }
 
     public void StartGame()

@@ -5,12 +5,14 @@ public class AudioController : MonoBehaviour
 {
     [SerializeField] private AudioClip[] songs;
     private AudioSource aud;
+    private int currentIndex;
 
     private void Awake()
     {
         aud = GetComponent<AudioSource>();
         aud.volume = 0f;
-        aud.clip = songs[PlayerPrefs.GetInt("sky", 0)];
+        currentIndex = PlayerPrefs.GetInt("sky", 0);
+        aud.clip = songs[currentIndex];
     }
 
     private void Start()
@@ -47,7 +49,19 @@ public class AudioController : MonoBehaviour
     {
         aud.Stop();
         aud.volume = 0f;
-        aud.clip = songs[i];
+
+        if (currentIndex == 0 && i < 0)
+        {
+            currentIndex = 4;
+        }
+
+        else if (currentIndex == 3 && i > 0)
+        {
+            currentIndex = -1;
+        }
+
+        currentIndex += i;
+        aud.clip = songs[currentIndex];
         FadeMusic(1f);
     }
 }
