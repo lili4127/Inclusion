@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     public void ToggleSettings()
     {
-        //screens[0].SetActive(!screens[0].activeInHierarchy);
+        screens[0].SetActive(!screens[0].activeInHierarchy);
         screens[2].SetActive(!screens[2].activeInHierarchy);
     }
 
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
         float time = 0;
         Vector3 startPosition = g.transform.position;
 
-        while (time < duration)
+        while (time < duration && timerGoing)
         {
             g.transform.position = Vector3.Lerp(startPosition, targetPosition, time / duration);
             time += Time.deltaTime;
@@ -138,21 +138,16 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         StopTimer();
-        //panels[0].SetActive(true);
     }
 
     public void ResumeGame()
     {
         Time.timeScale = 1f;
         StartTimer();
-        //panels[0].SetActive(false);
-        //gameplayObjects[0].SetActive(true);
     }
 
     public void RestartGame()
     {
-        //panels[0].SetActive(false);
-        //panels[1].SetActive(false);
         score = 0f;
         texts[1].text = score.ToString();
         Time.timeScale = 1f;
