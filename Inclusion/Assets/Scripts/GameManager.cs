@@ -5,7 +5,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI[] texts;
-    [SerializeField] private GameObject[] panels;
+    [SerializeField] private GameObject[] screens;
     public bool timerGoing { get; private set; }
     private float score = 0f;
     private float pointsPerSecond = 10;
@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         timerGoing = false;
+        screens[0].SetActive(true);
+        screens[1].SetActive(false);
     }
 
     private void OnEnable()
@@ -22,15 +24,17 @@ public class GameManager : MonoBehaviour
         PlayerTrain.gameLost += LoseGame;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void StartGame()
     {
-        Time.timeScale = 1;
         StartCoroutine(CountdownToStart());
+        screens[0].SetActive(false);
+        screens[1].SetActive(true);
     }
 
     IEnumerator CountdownToStart()
     {
+        texts[0].gameObject.SetActive(false);
+        texts[1].gameObject.SetActive(false);
         int countdownTime = 3;
         texts[0].text = countdownTime.ToString();
         texts[0].gameObject.SetActive(true);
@@ -110,20 +114,20 @@ public class GameManager : MonoBehaviour
     {
         StopTimer();
 
-        if (PlayerPrefs.GetInt("highscore", 0) < Mathf.FloorToInt(score))
-        {
-            texts[3].text = "New High Score!";
-            texts[4].text = texts[1].text;
-            PlayerPrefs.SetInt("highscore", Mathf.FloorToInt(score));
-        }
+        //if (PlayerPrefs.GetInt("highscore", 0) < Mathf.FloorToInt(score))
+        //{
+        //    texts[2].text = "New High Score!";
+        //    texts[3].text = texts[1].text;
+        //    PlayerPrefs.SetInt("highscore", Mathf.FloorToInt(score));
+        //}
 
-        else
-        {
-            texts[3].text = "Final Score: " + texts[1].text;
-            texts[4].text = "High Score: " + PlayerPrefs.GetInt("highscore", 0).ToString() + "m";
-        }
+        //else
+        //{
+        //    texts[2].text = "Final Score: " + texts[1].text;
+        //    texts[3].text = "High Score: " + PlayerPrefs.GetInt("highscore", 0).ToString() + "m";
+        //}
 
-        panels[1].SetActive(true);
+        //panels[1].SetActive(true);
     }
 
     public void PauseGame()

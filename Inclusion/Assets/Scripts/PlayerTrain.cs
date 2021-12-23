@@ -32,7 +32,7 @@ public class PlayerTrain : MonoBehaviour
         activeChildColors = new List<int>();
         foreach (Renderer r in childrenRenderers)
         {
-            r.enabled = true;
+            r.enabled = false;
         }
     }
 
