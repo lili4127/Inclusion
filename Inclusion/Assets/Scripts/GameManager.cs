@@ -15,7 +15,8 @@ public class GameManager : MonoBehaviour
     public bool timerGoing { get; private set; }
     private float score = 0f;
     private float pointsPerSecond = 10;
-    public static event System.Action<int> gameBegin;
+    private int difficulty;
+    [SerializeField] private Renderer playerRend;
     [SerializeField] private ObjectPool pool;
 
     private void Awake()
@@ -54,8 +55,10 @@ public class GameManager : MonoBehaviour
         texts[2].text = "High Score: " + PlayerPrefs.GetInt("highscore", 0).ToString() + "m";
     }
 
+    //GamePlay
     public void StartGame()
     {
+        playerRend.enabled = true;
         StartCoroutine(CountdownToStart());
         screens[0].SetActive(false);
         screens[1].SetActive(true);
@@ -85,7 +88,7 @@ public class GameManager : MonoBehaviour
 
     private void BeginGame()
     {
-        gameBegin?.Invoke(PlayerPrefs.GetInt("difficulty",4));
+        difficulty = 4;
         score = 0f;
         texts[1].text = score.ToString() + "m";
         texts[1].gameObject.SetActive(true);
@@ -96,7 +99,7 @@ public class GameManager : MonoBehaviour
     {
         timerGoing = true;
         StartCoroutine(UpdateTimer());
-        StartCoroutine(SpawnObstacles(PlayerPrefs.GetInt("difficulty", 4)));
+        StartCoroutine(SpawnObstacles(difficulty));
     }
 
     IEnumerator UpdateTimer()
@@ -120,8 +123,24 @@ public class GameManager : MonoBehaviour
         {
             GameObject g = pool.Get();
             g.gameObject.SetActive(true);
-            StartCoroutine(MoveCo(g, new Vector3(pool.endPos.x, g.transform.position.y, pool.endPos.z), difficulty * 1.5f));
-            yield return new WaitForSeconds(difficulty * 2);
+
+            if (score > 100)
+            {
+                difficulty = 3;
+            }
+
+            if (score > 500)
+            {
+                difficulty = 2;
+            }
+
+            if (score > 1000)
+            {
+                difficulty = 1;
+            }
+
+            StartCoroutine(MoveCo(g, new Vector3(pool.endPos.x, g.transform.position.y, pool.endPos.z), difficulty));
+            yield return new WaitForSeconds(difficulty);
         }
     }
 
@@ -156,26 +175,6 @@ public class GameManager : MonoBehaviour
         }
 
         screens[0].SetActive(true);
-    }
-
-    public void PauseGame()
-    {
-        Time.timeScale = 0f;
-        StopTimer();
-    }
-
-    public void ResumeGame()
-    {
-        Time.timeScale = 1f;
-        StartTimer();
-    }
-
-    public void RestartGame()
-    {
-        score = 0f;
-        texts[1].text = score.ToString();
-        Time.timeScale = 1f;
-        StartCoroutine(CountdownToStart());
     }
 
     private void OnDisable()

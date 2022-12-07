@@ -2141,6 +2141,7 @@ MonoBehaviour:
   - {fileID: 67478693}
   muteImage: {fileID: 2064718791}
   isMute: 0
+  playerRend: {fileID: 1482650376}
   pool: {fileID: 610944660}
 --- !u!1 &1127263751
 GameObject:
@@ -2691,6 +2692,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a6643a2e54947cd97712cf94d11208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!137 &1482650376 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8592876449707639036, guid: 6b5d591dbb72ac04a80d42bbb710cb7a, type: 3}
+  m_PrefabInstance: {fileID: 541798136}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1490866798
 GameObject:
   m_ObjectHideFlags: 0
@@ -3445,6 +3451,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: child3Rend
       objectReference: {fileID: 0}
+    - target: {fileID: 7973196490011343609, guid: 7e974527b04944bd9a7c3855519fe995, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7973196490140513848, guid: 7e974527b04944bd9a7c3855519fe995, type: 3}
       propertyPath: m_Name
       value: Child3
@@ -3522,6 +3532,10 @@ PrefabInstance:
     - target: {fileID: 7973196490011343495, guid: 7e974527b04944bd9a7c3855519fe995, type: 3}
       propertyPath: m_Name
       value: child2Rend
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973196490011343609, guid: 7e974527b04944bd9a7c3855519fe995, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7973196490140513848, guid: 7e974527b04944bd9a7c3855519fe995, type: 3}
       propertyPath: m_Name
@@ -3878,6 +3892,10 @@ PrefabInstance:
     - target: {fileID: 7973196490011343495, guid: 7e974527b04944bd9a7c3855519fe995, type: 3}
       propertyPath: m_Name
       value: child1Rend
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973196490011343609, guid: 7e974527b04944bd9a7c3855519fe995, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7973196490140513848, guid: 7e974527b04944bd9a7c3855519fe995, type: 3}
       propertyPath: m_Name

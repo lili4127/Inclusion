@@ -12,6 +12,7 @@ public class CameraController : MonoBehaviour
 
     public void StartGame()
     {
+        transform.position = new Vector3(15, 1, 3);
         StartCoroutine(MoveCamera(2f));
     }
 
