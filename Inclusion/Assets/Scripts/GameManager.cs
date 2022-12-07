@@ -1,11 +1,17 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    //screen and settings
     [SerializeField] private TextMeshProUGUI[] texts;
     [SerializeField] private GameObject[] screens;
+    [SerializeField] private Image muteImage;
+    [SerializeField] private bool isMute;
+
+    //Gameplay
     public bool timerGoing { get; private set; }
     private float score = 0f;
     private float pointsPerSecond = 10;
@@ -15,6 +21,18 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         timerGoing = false;
+
+        if (AudioListener.volume == 0)
+        {
+            isMute = true;
+        }
+
+        else
+        {
+            isMute = false;
+        }
+
+        texts[2].text = "High Score: " + PlayerPrefs.GetInt("highscore", 0).ToString() + "m";
     }
 
     private void OnEnable()
@@ -22,10 +40,18 @@ public class GameManager : MonoBehaviour
         PlayerTrain.gameLost += LoseGame;
     }
 
-    public void ToggleSettings()
+    //Mute and Highscore Settings
+    public void Mute()
     {
-        screens[0].SetActive(!screens[0].activeInHierarchy);
-        screens[2].SetActive(!screens[2].activeInHierarchy);
+        isMute = !isMute;
+        AudioListener.volume = isMute ? 0 : 1;
+        muteImage.color = isMute ? Color.red : Color.white;
+    }
+
+    public void ResetHighscore()
+    {
+        PlayerPrefs.SetInt("highscore", 0);
+        texts[2].text = "High Score: " + PlayerPrefs.GetInt("highscore", 0).ToString() + "m";
     }
 
     public void StartGame()
@@ -118,20 +144,18 @@ public class GameManager : MonoBehaviour
     {
         StopTimer();
 
-        //if (PlayerPrefs.GetInt("highscore", 0) < Mathf.FloorToInt(score))
-        //{
-        //    texts[2].text = "New High Score!";
-        //    texts[3].text = texts[1].text;
-        //    PlayerPrefs.SetInt("highscore", Mathf.FloorToInt(score));
-        //}
+        if (PlayerPrefs.GetInt("highscore", 0) < Mathf.FloorToInt(score))
+        {
+            texts[2].text = "New High Score! : " + texts[1].text;
+            PlayerPrefs.SetInt("highscore", Mathf.FloorToInt(score));
+        }
 
-        //else
-        //{
-        //    texts[2].text = "Final Score: " + texts[1].text;
-        //    texts[3].text = "High Score: " + PlayerPrefs.GetInt("highscore", 0).ToString() + "m";
-        //}
+        else
+        {
+            texts[2].text = "Final Score: " + texts[1].text;
+        }
 
-        //panels[1].SetActive(true);
+        screens[0].SetActive(true);
     }
 
     public void PauseGame()
